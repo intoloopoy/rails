@@ -744,7 +744,7 @@ module ActiveRecord
       def create_database(name, options = {})
         options = options.reverse_merge(:encoding => "utf8")
 
-        option_string = options.symbolize_keys.sum do |key, value|
+        option_string = options.symbolize_keys.map do |key, value|
           case key
           when :owner
             " OWNER = \"#{value}\""
@@ -760,6 +760,8 @@ module ActiveRecord
             ""
           end
         end
+
+        option_string = option_string.join("")
 
         execute "CREATE DATABASE #{quote_table_name(name)}#{option_string}"
       end
